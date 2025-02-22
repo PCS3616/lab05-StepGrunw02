@@ -42,8 +42,3 @@ K /0002          ; PASSO DE MEMORIA (+2)
 K /0001          ; INCREMENTO UNITARIO
 K /003F          ; LIMITE (DEC 63)
 K /0001          ; CONSTANTE 1
-K /0000          ; SOMA ACUMULADA
-K /0002          ; PASSO DE MEMORIA (+2)
-K /0001          ; INCREMENTO UNITARIO
-K /003F          ; LIMITE (DEC 63)
-K /0001          ; CONSTANTE 1
