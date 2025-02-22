@@ -1,44 +1,44 @@
-@ /0000          ; inicio do programa
-SC /010          ; chama subrotina principal
-HM /000          ; encerra execucao
+@ /0000          ; INICIO DO PROGRAMA
+SC /010          ; CHAMA SUBROTINA PRINCIPAL
+HM /000          ; ENCERRA EXECUCAO
 
-@ /010           ; subrotina principal
-K /0000          ; inicializa variaveis
-LD /090          ; carrega endereco base (0100)
-MM /092          ; armazena endereco atual
-LD /094          ; inicializa contador n=0
-MM /096          ; armazena contador
-LD /098          ; inicializa soma=0
-MM /09A          ; armazena soma
+@ /010           ; SUBROTINA PRINCIPAL
+K /0000          ; INICIALIZA VARIAVEIS
+LD /090          ; CARREGA ENDERECO BASE (0100)
+MM /092          ; ARMAZENA ENDERECO ATUAL
+LD /094          ; INICIALIZA CONTADOR N=0
+MM /096          ; ARMAZENA CONTADOR
+LD /098          ; INICIALIZA SOMA=0
+MM /09A          ; ARMAZENA SOMA
 
-@ /020           ; loop de calculo
-LD /09A          ; carrega soma atual
-MM (092)         ; armazena na memoria
-LD /092          ; carrega endereco
-AD /09C          ; incrementa +2 bytes
-MM /092          ; atualiza endereco
-LD /096          ; carrega contador
-AD /09E          ; incrementa n
-MM /096          ; atualiza contador
-LD /09A          ; carrega soma
-AD /096          ; soma += 2n (parte 1)
-AD /096          ; soma += 2n (parte 2)
-AD /0A0          ; soma += 1 (2n+1)
-MM /09A          ; atualiza soma
-LD /096          ; carrega contador
-SB /0A2          ; verifica se n=63
-JZ /040          ; finaliza se n=63
-JP /020          ; repete loop
+@ /020           ; LOOP DE CALCULO
+LD /09A          ; CARREGA SOMA ATUAL
+MM (092)         ; ARMAZENA NA MEMORIA
+LD /092          ; CARREGA ENDERECO
+AD /09C          ; INCREMENTA +2 BYTES
+MM /092          ; ATUALIZA ENDERECO
+LD /096          ; CARREGA CONTADOR
+AD /09E          ; INCREMENTA N
+MM /096          ; ATUALIZA CONTADOR
+LD /09A          ; CARREGA SOMA
+AD /096          ; SOMA += 2N (PARTE 1)
+AD /096          ; SOMA += 2N (PARTE 2)
+AD /0A0          ; SOMA += 1 (2N+1)
+MM /09A          ; ATUALIZA SOMA
+LD /096          ; CARREGA CONTADOR
+SB /0A2          ; VERIFICA SE N=63
+JZ /040          ; FINALIZA SE N=63
+JP /020          ; REPETE LOOP
 
-@ /040           ; finalizacao
-RS /010          ; retorna da subrotina
+@ /040           ; FINALIZACAO
+RS /010          ; RETORNA DA SUBROTINA
 
-@ /090           ; dados/constantes
-K /0100          ; endereco inicial
-K /0000          ; endereco atual
-K /0000          ; contador (n)
-K /0000          ; soma acumulada
-K /0002          ; passo de memoria (+2)
-K /0001          ; incremento unitario
-K /003F          ; limite (dec 63)
-K /0001          ; constante 1
+@ /090           ; DADOS/CONSTANTES
+K /0100          ; ENDERECO INICIAL
+K /0000          ; ENDERECO ATUAL
+K /0000          ; CONTADOR (N)
+K /0000          ; SOMA ACUMULADA
+K /0002          ; PASSO DE MEMORIA (+2)
+K /0001          ; INCREMENTO UNITARIO
+K /003F          ; LIMITE (DEC 63)
+K /0001          ; CONSTANTE 1
