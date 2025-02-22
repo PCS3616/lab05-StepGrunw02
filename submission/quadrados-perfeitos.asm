@@ -1,28 +1,44 @@
-@ /0000
-LV /000 ; inicializa ac com 0
-MM /102 ; armazena 0 na posicao 0x102
-MM /104 ; inicializa o acumulador de somas
-LV /001 ; inicializa o contador n com 1
-MM /106
+@ /0000          ; inicio do programa
+SC /010          ; chama subrotina principal
+HM /000          ; encerra execucao
 
-@ /0010
-LD /104 ; carrega sn
-AD /106 ; soma n
-MM /104 ; atualiza sn
-LD /104 ; carrega quadrado perfeito
-MM /102 ; armazena na posicao correta
-LD /106 ; carrega n
-AD /108 ; incrementa n
-MM /106 
-SB /10A ; verifica se n chegou em 64
-JZ /030 ; se sim, finaliza
-JP /010 ; repete loop
+@ /010           ; subrotina principal
+K /0000          ; inicializa variaveis
+LD /090          ; carrega endereco base (0100)
+MM /092          ; armazena endereco atual
+LD /094          ; inicializa contador n=0
+MM /096          ; armazena contador
+LD /098          ; inicializa soma=0
+MM /09A          ; armazena soma
 
-@ /0030
-HM /000 ; fim
+@ /020           ; loop de calculo
+LD /09A          ; carrega soma atual
+MM (092)         ; armazena na memoria
+LD /092          ; carrega endereco
+AD /09C          ; incrementa +2 bytes
+MM /092          ; atualiza endereco
+LD /096          ; carrega contador
+AD /09E          ; incrementa n
+MM /096          ; atualiza contador
+LD /09A          ; carrega soma
+AD /096          ; soma += 2n (parte 1)
+AD /096          ; soma += 2n (parte 2)
+AD /0A0          ; soma += 1 (2n+1)
+MM /09A          ; atualiza soma
+LD /096          ; carrega contador
+SB /0A2          ; verifica se n=63
+JZ /040          ; finaliza se n=63
+JP /020          ; repete loop
 
-@ /0108
-K /0002 ; cte 2
+@ /040           ; finalizacao
+RS /010          ; retorna da subrotina
 
-@ /010A
-K /0040 ; limite 64
+@ /090           ; dados/constantes
+K /0100          ; endereco inicial
+K /0000          ; endereco atual
+K /0000          ; contador (n)
+K /0000          ; soma acumulada
+K /0002          ; passo de memoria (+2)
+K /0001          ; incremento unitario
+K /003F          ; limite (dec 63)
+K /0001          ; constante 1
