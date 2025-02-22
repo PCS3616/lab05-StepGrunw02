@@ -4,33 +4,41 @@ HM /000          ; fim do programa (halt)
 
 @ /010           ; subrotina para calcular os quadrados perfeitos
 K /0000          ; inicializa variaveis
-LD /090          ; carrega o valor inicial de i (0)
-MM /092          ; armazena i na memoria
-LD /094          ; carrega o valor inicial da soma (0)
-MM /096          ; armazena a soma na memoria
+LD /090          ; carrega o endereco inicial (0x100)
+MM /092          ; armazena o endereco atual
+LD /094          ; carrega n (0)
+MM /096          ; armazena n
+LD /098          ; carrega soma (0)
+MM /09A          ; armazena soma
 
 @ /020           ; loop principal
-LD /092          ; carrega o valor de i
-ML /098          ; multiplica i por 2 (2i)
-AD /09A          ; soma 1 (2i + 1)
-AD /096          ; atualiza a soma (soma += 2i + 1)
-MM /096          ; armazena a soma atualizada
-LD /096          ; carrega a soma (n²)
-MM /100          ; armazena o quadrado na memoria (posicao 0x100 + 2i)
-LD /092          ; carrega i
-AD /09A          ; incrementa i (i += 1)
-MM /092          ; armazena o novo valor de i
-SB /09C          ; subtrai 64 de i (i - 64)
-JZ /040          ; se i == 64, termina o loop
-JP /020          ; caso contrario, continua o loop
+LD /09A          ; carrega a soma
+MM (092)         ; armazena a soma no endereco atual (ex: 0x100, 0x102, etc.)
+LD /092          ; carrega o endereco atual
+AD /09C          ; soma 2 para proxima posicao
+MM /092          ; atualiza o endereco
+LD /096          ; carrega n
+AD /09E          ; incrementa n em 1
+MM /096          ; armazena n
+LD /09A          ; carrega a soma
+AD /096          ; soma n (para calcular 2n + 1)
+AD /096          ; soma n novamente (total: soma += 2n + 1)
+AD /0A0          ; soma 1 (completa 2n + 1)
+MM /09A          ; armazena a nova soma
+LD /096          ; carrega n
+SB /0A2          ; subtrai 63 (verifica se n chegou a 63)
+JZ /040          ; se sim, termina
+JP /020          ; repete o loop
 
 @ /040           ; fim da subrotina
 RS /010          ; retorna da subrotina
 
 @ /090           ; variaveis e constantes
-K /0000          ; i (inicializado com 0)
-K /0000          ; soma (inicializado com 0)
-K /0002          ; constante 2 (para multiplicacao)
-K /0001          ; constante 1 (para incremento)
-K /0040          ; constante 64 (limite do loop)
-K /0100          ; endereco inicial para armazenar os quadrados
+K /0100          ; endereco inicial (0x100)
+K /0000          ; endereco atual
+K /0000          ; n (0 a 63)
+K /0000          ; soma (acumula n²)
+K /0002          ; constante 2 (incremento de endereco)
+K /0001          ; constante 1 (incremento de n)
+K /003F          ; constante 63 (limite do loop)
+K /0001          ; constante 1 (para 2n + 1)
