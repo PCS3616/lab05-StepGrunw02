@@ -1,6 +1,6 @@
 @ /0000          ; inicio do programa
 SC /010          ; chama a subrotina para calcular os quadrados perfeitos
-HM /000          ; fim do programa (halt)
+HM /000          ; fim do programa
 
 @ /010           ; subrotina para calcular os quadrados perfeitos
 K /0000          ; inicializa variaveis
@@ -13,7 +13,7 @@ MM /09A          ; armazena soma
 
 @ /020           ; loop principal
 LD /09A          ; carrega a soma
-MM (092)         ; armazena a soma no endereco atual (ex: 0x100, 0x102, etc.)
+MM /100          ; armazena a soma no endereco 0x100 + 2*n
 LD /092          ; carrega o endereco atual
 AD /09C          ; soma 2 para proxima posicao
 MM /092          ; atualiza o endereco
