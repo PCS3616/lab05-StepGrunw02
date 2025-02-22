@@ -1,44 +1,44 @@
 @ /0000          ; inicio do programa
-SC /010          ; chama a subrotina para calcular os quadrados perfeitos
-HM /000          ; fim do programa
+SC /010          ; chama subrotina de calculo
+HM /000          ; encerra programa
 
-@ /010           ; subrotina para calcular os quadrados perfeitos
-K /0000          ; inicializa variaveis
-LD /090          ; carrega o endereco inicial (0x100)
-MM /092          ; armazena o endereco atual
-LD /094          ; carrega n (0)
+@ /010           ; subrotina principal
+K /0000          ; inicializacao
+LD /090          ; carrega endereco base (0100)
+MM /092          ; armazena endereco atual
+LD /094          ; carrega contador n=0
 MM /096          ; armazena n
-LD /098          ; carrega soma (0)
+LD /098          ; carrega soma=0
 MM /09A          ; armazena soma
 
-@ /020           ; loop principal
-LD /09A          ; carrega a soma
-MM /100          ; armazena a soma no endereco 0x100 + 2*n
-LD /092          ; carrega o endereco atual
-AD /09C          ; soma 2 para proxima posicao
-MM /092          ; atualiza o endereco
+@ /020           ; loop de calculo
+LD /09A          ; carrega soma atual
+MM (092)         ; armazena no endereco atual
+LD /092          ; carrega endereco
+AD /09C          ; soma +2
+MM /092          ; atualiza endereco
 LD /096          ; carrega n
-AD /09E          ; incrementa n em 1
-MM /096          ; armazena n
-LD /09A          ; carrega a soma
-AD /096          ; soma n (para calcular 2n + 1)
-AD /096          ; soma n novamente (total: soma += 2n + 1)
-AD /0A0          ; soma 1 (completa 2n + 1)
-MM /09A          ; armazena a nova soma
+AD /09E          ; n+1
+MM /096          ; atualiza n
+LD /09A          ; carrega soma
+AD /096          ; soma += 2n+1 (parte 1/2)
+AD /096          ; soma += 2n+1 (parte 2/2)
+AD /0A0          ; soma += 1
+MM /09A          ; atualiza soma
 LD /096          ; carrega n
-SB /0A2          ; subtrai 63 (verifica se n chegou a 63)
-JZ /040          ; se sim, termina
-JP /020          ; repete o loop
+SB /0A2          ; n-63
+JZ /040          ; termina se n=63
+JP /020          ; repete loop
 
-@ /040           ; fim da subrotina
-RS /010          ; retorna da subrotina
+@ /040           ; finalizacao
+RS /010          ; retorna
 
-@ /090           ; variaveis e constantes
-K /0100          ; endereco inicial (0x100)
+@ /090           ; dados
+K /0100          ; endereco inicial
 K /0000          ; endereco atual
-K /0000          ; n (0 a 63)
-K /0000          ; soma (acumula n²)
-K /0002          ; constante 2 (incremento de endereco)
-K /0001          ; constante 1 (incremento de n)
-K /003F          ; constante 63 (limite do loop)
-K /0001          ; constante 1 (para 2n + 1)
+K /0000          ; n (0-63)
+K /0000          ; soma (n²)
+K /0002          ; passo de endereco
+K /0001          ; incremento
+K /003F          ; limite (63)
+K /0001          ; constante 1
