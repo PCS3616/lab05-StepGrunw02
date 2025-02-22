@@ -1,35 +1,37 @@
-; programa principal
-K/ 0000 8100 ; carrega N no AC
-K/ 0002 1300 ; desvio se N for 0
-K/ 0004 A200 ; desvio para sub-rotina
-K/ 0006 C006 ; finaliza o programa
+@ =0000   ; Início do programa principal
+    LD N   ; Carrega N no AC
+    JZ FIM ; Se N for 0, vai para o final
+    SC FAT ; Chama a sub-rotina do fatorial
+    HM /0006  ; Finaliza o programa
 
-; sub-rotina
-K/ 0200 0006 ; inicio da subrotina
-K/ 0202 8100 ; armazena N no AC
-K/ 0204 900C ; N no NTemp
-K/ 0206 900A ; N no FatTemp
+@ =0200  ; Início da sub-rotina FAT
+FAT LD N       ; Carrega N no AC
+    MM NTEMP   ; Salva N em NTEMP
+    MM FACTEMP ; Salva N em FACTEMP
 
-K/ 0208 800C ; NTemp no AC
-K/ 020A 5008 ; subtrai 1 do AC
-K/ 020C 1218 ; desvio para finalizar quando NTemp - 1 = 0
-K/ 020E 900C ; salva novo NTemp
-K/ 0210 800A ; carrega FatTemp no AC
-K/ 0212 600C ; multiplica novo NTemp por FatTemp
-K/ 0214 900A ; salva novo FatTemp
-K/ 0216 0208 ; volta para o inicio do loop
-K/ 0218 800A ; FatTemp no AC
-K/ 021A 9102 ; resultado em 0x102
-K/ 021C B200 ; retorna da subrotina
+LOOP LD NTEMP  ; Carrega NTEMP no AC
+    SB UM      ; Subtrai 1
+    JZ FIMFAT  ; Se NTEMP - 1 = 0, termina o cálculo
+    MM NTEMP   ; Atualiza NTEMP
+    LD FACTEMP ; Carrega FACTEMP no AC
+    ML NTEMP   ; Multiplica por NTEMP
+    MM FACTEMP ; Atualiza FACTEMP
+    JP LOOP    ; Volta para o loop
 
+FIMFAT LD FACTEMP ; Carrega resultado final
+    MM RES       ; Salva em RES
+    RS FAT       ; Retorna da sub-rotina
 
-; desvio se N for zero
-K/ 0300 3001 ; carrega 1 no AC
-K/ 0302 9102 ; AC para memo 0x102
-K/ 0304 C304 ; finaliza
+FIM LD UM    ; Caso N seja 0, RES = 1
+    MM RES  
+    HM /0304 ; Finaliza
 
+@ =0008
+UM      K =1     ; Constante para decrementar
+FACTEMP K =1     ; Variável para armazenar o fatorial
+NTEMP   K =1     ; Variável temporária para N durante o loop
 
-; dados
-K/ 0008 0001 ; constante para decrementar (1)
-K/ 000A 0001 ; variavel para armazenar o fatorial (FatTemp)
-K/ 000C 0001 ; variavel temporaria para N durante o loop (NTemp)
+@ =0100
+N  K =0  ; Argumento do fatorial
+RES K =0 ; Resultado do fatorial
+
